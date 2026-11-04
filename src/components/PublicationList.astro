@@ -1,0 +1,190 @@
+
+---
+import { publications } from "../data/publications";
+
+interface Props {
+  lang: "ja" | "en";
+}
+
+const { lang } = Astro.props;
+
+// 業績の分類
+const sections = [
+  { type: "paper", ja: "論文", en: "Papers" },
+  { type: "patent", ja: "特許", en: "Patents" },
+  { type: "book", ja: "書籍", en: "Books" }
+] as const;
+
+// 自分の名前を太字で表示
+const myNames = [
+  "Daisuke Suzuki",
+  "Suzuki D",
+  "鈴木 大輔",
+  "鈴木大輔",
+  "D. Suzuki",
+];
+
+function splitAuthors(authors: string) {
+  return authors.split(
+    /(Daisuke Suzuki|Suzuki D|鈴木 大輔)/g
+  );
+}
+---
+
+{sections.map((section) => {
+  const items = publications
+    .filter((item) =>
+      item.type === section.type &&
+      (item.languages?.includes(lang) ?? true)
+    )
+    .sort((a, b) => b.year - a.year);
+
+  if (items.length === 0) return null;
+
+  return (
+    <section class="publication-section">
+
+      <h2>{section[lang]}</h2>
+
+      <ol class="publication-list">
+        {items.map((item) => (
+          <li class="publication-item">
+
+            {/* 論文タイトル */}
+            <div class="publication-title">
+              {item.link ? (
+                <a
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {item.title}
+                </a>
+              ) : (
+                <strong>{item.title}</strong>
+              )}
+            </div>
+
+            {/* 著者一覧 */}
+            <div class="publication-authors">
+              {splitAuthors(item.authors).map((part) =>
+                myNames.includes(part) ? (
+                  <strong>{part}</strong>
+                ) : (
+                  <Fragment>{part}</Fragment>
+                )
+              )}
+            </div>
+
+            {/* 雑誌名、巻号、出版年、リンク */}
+            <div class="publication-info">
+              <em>{item.journal}</em>
+              {item.vol && `, ${item.vol}`}
+              {` (${item.year})`}
+
+              {item.link && (
+                <>
+                  {" · "}
+                  <a
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Link
+                  </a>
+                </>
+              )}
+            </div>
+
+          </li>
+        ))}
+      </ol>
+
+    </section>
+  );
+})}
+
+<style>
+  /* セクション間 */
+  .publication-section {
+    margin-bottom: 2rem;
+  }
+
+  h2 {
+    font-size: 1.45rem;
+    margin-bottom: 0.8rem;
+  }
+
+  /* リスト全体 */
+  .publication-list {
+    margin: 0;
+    padding-left: 1.5rem;
+  }
+
+  /* 論文ごとの余白 */
+  .publication-item {
+    margin-bottom: 1rem;
+    padding-left: 0.2rem;
+    line-height: 1.5;
+    text-align: justify;
+    text-justify: inter-word;
+    overflow-wrap: break-word;
+  }
+
+  .publication-item::marker {
+    color: var(--color-muted);
+    font-size: 0.9rem;
+  }
+
+  /* タイトル */
+  .publication-title {
+    font-size: 0.98rem;
+    font-weight: 600;
+    line-height: 1.45;
+    margin-bottom: 0.15rem;
+  }
+
+  .publication-title a {
+    color: var(--color-link);
+    text-decoration: none;
+  }
+
+  .publication-title a:hover {
+    text-decoration: underline;
+  }
+
+  /* 著者一覧 */
+  .publication-authors {
+    font-size: 0.9rem;
+    line-height: 1.45;
+    margin-bottom: 0.1rem;
+  }
+
+  /* 雑誌名・年 */
+  .publication-info {
+    font-size: 0.88rem;
+    color: var(--color-muted);
+    line-height: 1.4;
+  }
+
+  .publication-info a {
+    color: var(--color-link);
+    text-decoration: underline;
+  }
+
+  /* スマートフォン */
+  @media (max-width: 650px) {
+    .publication-item {
+      font-size: 0.92rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .publication-title {
+      font-size: 0.94rem;
+    }
+
+    .publication-authors {
+      font-size: 0.85rem;
+    }
+  }
+</style>

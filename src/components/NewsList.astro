@@ -1,0 +1,171 @@
+
+---
+import { news, type Language } from "../data/news";
+
+interface Props {
+  lang: Language;
+  limit?: number;
+  expandable?: boolean;
+}
+
+const {
+  lang,
+  limit,
+  expandable = false
+} = Astro.props;
+
+// 言語で抽出し、日付の新しい順に並べる
+const filteredNews = [...news]
+  .filter((item) => item.languages.includes(lang))
+  .sort((a, b) => b.date.localeCompare(a.date));
+
+// 最初に表示するお知らせ
+const visibleNews = limit === undefined
+  ? filteredNews
+  : filteredNews.slice(0, limit);
+
+// 展開時に表示するお知らせ
+const hiddenNews = limit === undefined
+  ? []
+  : filteredNews.slice(limit);
+---
+
+<div class="news-list">
+  {filteredNews.length === 0 && (
+    <p>
+      {lang === "ja"
+        ? "現在お知らせはありません。"
+        : "No news available."}
+    </p>
+  )}
+
+  {/* 最初に表示するお知らせ */}
+  {visibleNews.map((item) => (
+    <article class="news-item">
+      <time datetime={item.date}>
+        {item.date}
+      </time>
+
+      <h3>
+        {item.link ? (
+          <a href={item.link}>{item.title}</a>
+        ) : (
+          item.title
+        )}
+      </h3>
+
+      {item.description && (
+        <p>{item.description}</p>
+      )}
+    </article>
+  ))}
+
+  {/* 残りのお知らせを展開 */}
+  {expandable && hiddenNews.length > 0 && (
+    <details class="more-news">
+      <summary>
+        <span class="show-more">
+          {lang === "ja"
+            ? `もっと見る（残り${hiddenNews.length}件）`
+            : `Show more (${hiddenNews.length})`}
+        </span>
+        <span class="show-less">
+          {lang === "ja" ? "閉じる" : "Show less"}
+        </span>
+      </summary>
+
+      {hiddenNews.map((item) => (
+        <article class="news-item">
+          <time datetime={item.date}>
+            {item.date}
+          </time>
+
+          <h3>
+            {item.link ? (
+              <a href={item.link}>{item.title}</a>
+            ) : (
+              item.title
+            )}
+          </h3>
+
+          {item.description && (
+            <p>{item.description}</p>
+          )}
+        </article>
+      ))}
+    </details>
+  )}
+</div>
+
+<style>
+  .news-item {
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--color-border);
+    line-height: 1.5;
+  }
+
+  .news-item time {
+    font-size: 0.82rem;
+    color: var(--color-muted);
+  }
+
+  .news-item h3 {
+    font-size: 1rem;
+    margin: 0.25rem 0;
+    font-weight: 600;
+  }
+
+  .news-item p {
+    font-size: 0.88rem;
+    margin: 0.25rem 0;
+    line-height: 1.5;
+  }
+
+  .news-item a {
+    color: var(--color-link);
+    text-decoration: none;
+  }
+
+  .news-item a:hover {
+    text-decoration: underline;
+  }
+
+  .more-news {
+    margin-top: 1rem;
+  }
+
+  .more-news summary {
+    cursor: pointer;
+    color: var(--color-link);
+    text-align: center;
+    padding: 0.7rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    list-style: none;
+  }
+
+  .more-news summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .more-news summary:hover {
+    background: var(--color-surface);
+  }
+
+  .more-news summary:focus-visible {
+    outline: 2px solid var(--color-link);
+    outline-offset: 3px;
+  }
+
+  .show-less {
+    display: none;
+  }
+
+  .more-news[open] .show-more {
+    display: none;
+  }
+
+  .more-news[open] .show-less {
+    display: inline;
+  }
+</style>
