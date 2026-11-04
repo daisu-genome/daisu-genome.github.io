@@ -1,0 +1,274 @@
+
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import NewsList from "../../components/NewsList.astro";
+---
+
+<BaseLayout title="Home" lang="en">
+
+  <!-- Profile Header -->
+  <div class="profile-header">
+
+    <!-- Profile Photo -->
+    <img
+      src="/profile.jpg"
+      alt="Daisuke Suzuki"
+      width="300"
+      height="400"
+      class="profile-image"
+    />
+
+    <!-- Name, Research Fields, and Links -->
+    <div class="profile-info">
+
+      <h1>Daisuke Suzuki, Ph.D.</h1>
+
+      <p class="field">
+        Membrane Vesicles | Colorectal Cancer-Associated Microbes | Bioinformatics | Environmental Toxicology
+      </p>
+
+      <!-- External Profile Links -->
+      <div class="profile-links">
+
+        <!-- ORCID -->
+        <a
+          href="https://orcid.org/YOUR-ORCID-ID"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="ORCID profile"
+          title="ORCID"
+        >
+          <img
+            src="/icons/orcid.svg"
+            alt=""
+            width="28"
+            height="28"
+          />
+        </a>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- About Me -->
+  <section class="about-section">
+    <h2>About Me</h2>
+
+    <p>
+      My research focuses on microbial ecology,
+      microbial genomics, and host-microbe interactions.
+    </p>
+
+    <p>
+      I am particularly interested in understanding
+      microbial diversity, genomic evolution,
+      and the relationships between microorganisms
+      and human health.
+    </p>
+  </section>
+
+  <!-- Research Interests -->
+  <section class="research-section">
+    <h2>Research Interests</h2>
+
+    <ul>
+      <li>Membrane vesicles</li>
+      <li>Human gut microbiome</li>
+      <li>Microbial genomics and evolution</li>
+      <li>Host-microbe interactions</li>
+      <li>Comparative genomics</li>
+    </ul>
+  </section>
+
+  <!-- News -->
+  <section class="news-section">
+    <h2>News</h2>
+
+    <NewsList
+      lang="en"
+      limit={5}
+      expandable
+    />
+  </section>
+
+</BaseLayout>
+
+<style>
+  /* =====================================
+     Profile Header
+     ===================================== */
+
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  /* Profile Photo */
+  .profile-image {
+    width: 180px;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 12px;
+    flex-shrink: 0;
+  }
+
+  /* Name and Research Fields */
+  .profile-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .profile-info h1 {
+    margin: 0 0 0.5rem;
+    font-size: 2.2rem;
+    line-height: 1.3;
+  }
+
+  .field {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+
+  /* =====================================
+     ORCID & LinkedIn
+     ===================================== */
+
+  .profile-links {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 0.9rem;
+  }
+
+  .profile-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: var(--color-surface);
+    transition:
+      background 0.2s,
+      transform 0.2s;
+  }
+
+  .profile-links img {
+    display: block;
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+  }
+
+  .profile-links a:hover {
+    background: #304052;
+    transform: translateY(-2px);
+  }
+
+  .profile-links a:focus-visible {
+    outline: 2px solid var(--color-link);
+    outline-offset: 3px;
+  }
+
+  /* =====================================
+     Main Contents
+     ===================================== */
+
+  section {
+    width: 100%;
+    margin-top: 2.5rem;
+  }
+
+  h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: var(--color-text);
+  }
+
+  section p {
+    line-height: 1.75;
+    text-align: justify;
+  }
+
+  section ul {
+    padding-left: 1.5rem;
+    line-height: 1.8;
+  }
+
+  /* =====================================
+     News
+     ===================================== */
+
+  .news-section {
+    margin-top: 4rem;
+  }
+
+  /* =====================================
+     Responsive Layout
+     ===================================== */
+
+  @media (max-width: 650px) {
+
+    .profile-header {
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .profile-image {
+      width: 100px;
+      height: 133px;
+    }
+
+    .profile-info h1 {
+      font-size: 1.5rem;
+    }
+
+    .field {
+      font-size: 0.9rem;
+    }
+
+    .profile-links {
+      gap: 8px;
+      margin-top: 0.6rem;
+    }
+
+    .profile-links a {
+      width: 36px;
+      height: 36px;
+    }
+
+    .profile-links img {
+      width: 24px;
+      height: 24px;
+    }
+
+    section {
+      margin-top: 2rem;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+    }
+
+  }
+
+  @media (max-width: 380px) {
+    .profile-header {
+      align-items: flex-start;
+    }
+
+    .profile-image {
+      width: 80px;
+      height: 107px;
+    }
+
+    .profile-info h1 {
+      font-size: 1.25rem;
+    }
+  }
+</style>

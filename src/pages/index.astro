@@ -1,11 +1,193 @@
----
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import NewsList from "../components/NewsList.astro";
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<BaseLayout title="Home" lang="ja">
+
+  <!-- プロフィールヘッダー -->
+  <div class="profile-header">
+
+    <img
+      src="/profile.jpg"
+      alt="Daisuke Suzuki"
+      width="300"
+      height="400"
+      class="profile-image"
+    />
+
+    <div class="profile-info">
+      <h1>鈴木大輔, 博士(理学)</h1>
+      <cite >
+        筑波大学 医学医療系, 博士研究員
+      </cite>
+      <p class="field">
+        細胞外小胞 | 大腸がん関連微生物 | バイオインフォマティクス | 生態毒性学
+      </p>
+
+      <div class="profile-links">
+        <a
+          href="https://orcid.org/0000-0003-1750-8516"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="ORCID profile"
+          title="ORCID"
+        >
+          <img
+            src="/icons/orcid.svg"
+            alt=""
+            width="28"
+            height="28"
+          />
+        </a>
+
+      </div>
+    </div>
+
+
+
+  </div>
+
+  <!-- 以下は全幅表示 -->
+  <section>
+    <h2>研究テーマ</h2>
+    <p>
+      私は現在、大腸がん患者さんの腸内環境に定着している細菌について、種内多様性の観点から研究しています。研究の手法は主に、in silico) 公開データベースや臨床検体由来の配列データを用いたメタゲノム解析・比較ゲノム解析、in vitro) 臨床検体より単離された株の特徴づけ、in vivo) 菌株をモデル動物に投与することで得られる応答の調査をしています。 
+    </p>
+    <p>
+      博士課程にて1年間渡英した際には、大腸がん患者さんに由来する公開メタゲノムを大規模に収集し、系統進化の観点から研究しました。こちらのプロジェクトは現在も進行中です。
+    </p>
+  </section>
+
+  <section>
+    <h2>興味のある対象・現象</h2>
+    <ul>
+        <li>大腸がんに関連する腸内細菌</li>
+        <li>腸内細菌の適応進化</li>
+        <li>ベシクルの産生機構</li>
+    </ul>
+  </section>
+  <section class="news-section">
+    <h2>お知らせ</h2>
+    <NewsList
+      lang="ja"
+      limit={5}
+      expandable
+    />
+
+  </section>
+
+</BaseLayout>
+
+<style>
+  /* 写真と名前の横並び */
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  /* 顔写真 */
+  .profile-image {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+    flex-shrink: 0;
+  }
+
+  /* 名前・専門分野 */
+  .profile-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .profile-info h1 {
+    margin: 0 0 0.5rem;
+    font-size: 2.2rem;
+  }
+
+  .field {
+    margin: 0;
+    color: #64748b;
+    font-size: 1.1rem;
+  }
+
+  /* 本文は全幅 */
+  section {
+    width: 100%;
+    margin-top: 2.5rem;
+  }
+
+  h2 {
+    margin-bottom: 1rem;
+  }
+
+  /* スマートフォン用 */
+  @media (max-width: 650px) {
+    .profile-header {
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .profile-image {
+      width: 100px;
+      height: 133px;
+    }
+
+    .profile-info h1 {
+      font-size: 1.5rem;
+    }
+  .field {
+    color: var(--color-muted);
+  }
+    }
+    .news-section {
+    margin-top: 4rem;
+  }
+
+
+  /* プロフィールリンク */
+  .profile-links {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 0.8rem;
+  }
+
+  /* アイコンのクリック領域 */
+  .profile-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: var(--color-surface);
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .profile-links img {
+    display: block;
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+  }
+
+  /* マウスを重ねたとき */
+  .profile-links a:hover {
+    background: #304052;
+    transform: translateY(-2px);
+  }
+
+  /* キーボード操作時 */
+  .profile-links a:focus-visible {
+    outline: 2px solid var(--color-link);
+    outline-offset: 3px;
+  }
+
+
+</style>

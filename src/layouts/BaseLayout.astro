@@ -1,0 +1,211 @@
+
+---
+interface Props {
+  title: string;
+  lang?: "ja" | "en";
+}
+
+const { title, lang = "ja" } = Astro.props;
+
+// 現在のURLを取得
+const currentPath =
+  Astro.url.pathname.replace(/\/+$/, "") + "/";
+
+// 英語の /en/ を除いたパス
+const jaPath = currentPath.startsWith("/en/")
+  ? currentPath.slice(3)
+  : currentPath;
+
+// 両言語のページが存在するパス
+const bilingualPaths = [
+  "/publications/",
+  "/",
+  "/cv/",
+  "/research/",
+  "/news/"
+];
+
+const showLanguageSwitch = bilingualPaths.includes(jaPath);
+
+const enPath = `/en${jaPath}`;
+---
+
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title} | Research Portfolio</title>
+    <link rel="icon" type="image/svg+xml"href="/favicon.svg?v=2" />
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        
+        <a href={lang === "en" ? "/en/" : "/"}>
+          {lang === "ja" ? "ホーム" : "Home"}
+        </a>
+
+        <a href={lang === "en" ? "/en/publications/" : "/publications/"}>
+          {lang === "ja" ? "論文" : "Publications"}
+        </a>
+
+        <a href={lang === "en" ? "/en/cv/" : "/cv/"}>
+          {lang === "ja" ? "略歴" : "CV"}
+        </a>
+
+      </nav>
+
+      {showLanguageSwitch && (
+        <div class="language-switch" aria-label="Language">
+          <a
+            href={jaPath}
+            lang="ja"
+            aria-current={lang === "ja" ? "page" : undefined}
+            class:list={{ active: lang === "ja" }}
+          >
+            Japanese
+          </a>
+
+          <a
+            href={enPath}
+            lang="en"
+            aria-current={lang === "en" ? "page" : undefined}
+            class:list={{ active: lang === "en" }}
+          >
+            English
+          </a>
+        </div>
+      )}
+    </header>
+
+    <main>
+      <slot />
+    </main>
+    <footer>
+      <p>© {new Date().getFullYear()} Daisuke Suzuki. All rights reserved.</p>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    color-scheme: dark;
+
+    /* カラーパレット */
+    --color-bg: #171D26;
+    --color-surface: #202936;
+    --color-text: #E3E9F0;
+    --color-muted: #A8B6C8;
+    --color-link: #91C6FA;
+    --color-border: #364354;
+    --color-active: #355879;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: Arial, sans-serif;
+    line-height: 1.8;
+  }
+
+  /* ヘッダー */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    padding: 1.2rem 8%;
+  }
+
+  /* ナビゲーション */
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  a {
+    color: var(--color-link);
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  a:focus-visible {
+    outline: 2px solid var(--color-link);
+    outline-offset: 4px;
+  }
+
+  /* 本文 */
+  main {
+    max-width: 850px;
+    min-height: 60vh;
+    margin: 4rem auto;
+    padding: 0 2rem;
+  }
+
+  h1, h2, h3 {
+    color: var(--color-text);
+  }
+
+  /* 言語切り替え */
+  .language-switch {
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    gap: 3px;
+    border-radius: 8px;
+    background: #141A22;
+  }
+
+  .language-switch a {
+    padding: 5px 12px;
+    border-radius: 6px;
+    color: var(--color-muted);
+    font-size: 0.85rem;
+    text-decoration: none;
+  }
+
+  .language-switch a.active {
+    background: var(--color-active);
+    color: #FFFFFF;
+    font-weight: bold;
+  }
+
+  .language-switch a:hover:not(.active) {
+    background: #304052;
+    color: #FFFFFF;
+  }
+
+  /* フッター */
+  footer {
+    text-align: center;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface);
+    padding: 2rem;
+    color: var(--color-muted);
+  }
+
+  /* スマートフォン */
+  @media (max-width: 650px) {
+    main {
+      margin: 2rem auto;
+      padding: 0 1.2rem;
+    }
+
+    header {
+      padding: 1rem 5%;
+    }
+
+    nav {
+      gap: 1rem;
+    }
+  }
+</style>
