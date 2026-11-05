@@ -94,18 +94,6 @@ export const publications: Publication[] = [
     ,
     {
       type : 'paper',
-      languages: ["ja","en"],
-      title: "Toxicological effects of chlorophenols to green algae observed at various pH and concentration of humic acid",
-      authors: "Daisuke Suzuki, Ryo Shoji",
-      journal: "Journal of Hazardous Materials",
-      vol: "400:123079",
-      year: 2020,
-      link: " https://doi.org/10.1016/j.jhazmat.2020.123079"
-      
-    }
-    ,
-    {
-      type : 'paper',
       languages: ["ja"],
       title: "SDGsを意識した社会実装教育とその展開－社会実装教育フォーラムのテーマをSDGsの観点で解析－",
       authors: "庄司 良, 鈴木 大輔",
